@@ -1,0 +1,35 @@
+Nmap Port Scan Output
+=====================
+Target: testphp.vulnweb.com (44.228.249.3)
+Scan Date: March 2026
+Command: nmap -sV -p- --open testphp.vulnweb.com
+
+Starting Nmap 7.94 ( https://nmap.org )
+Nmap scan report for testphp.vulnweb.com (44.228.249.3)
+Host is up (0.045s latency).
+Not shown: 65533 filtered tcp ports (no-response)
+
+PORT    STATE  SERVICE  VERSION
+80/tcp  open   http     Apache httpd 2.4.x ((Ubuntu))
+443/tcp closed https
+
+Service detection performed.
+
+--- Key Observations ---
+
+1. PORT 80 (HTTP) — OPEN
+   - Apache HTTP Server is running and accessible publicly
+   - No HTTPS (port 443) available — all traffic is unencrypted
+   - Server version is disclosed: Apache/2.4.x (Ubuntu)
+
+2. PORT 443 (HTTPS) — CLOSED
+   - No TLS/SSL certificate configured
+   - The site transmits all data in plaintext
+   - Risk: Credentials, sessions, and personal data are exposed on the network
+
+--- Risk Assessment ---
+- Exposing version information (Apache 2.4.x on Ubuntu) allows an attacker
+  to look up known CVEs for that specific version.
+- No HTTPS means zero encryption for all traffic.
+- Only one port open is a positive sign — minimal attack surface from a
+  network perspective.
