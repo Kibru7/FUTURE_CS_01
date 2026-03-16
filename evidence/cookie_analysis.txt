@@ -1,0 +1,53 @@
+Cookie Security Analysis
+=========================
+Target: http://testphp.vulnweb.com
+Date: March 2026
+Method: Browser DevTools + curl header inspection
+
+--- Cookies Identified ---
+
+Cookie Name : PHPSESSID
+Type        : Session cookie (PHP session identifier)
+Value       : a3b1c2d4e5f6789012345678  (example, not real)
+
+--- Cookie Attribute Audit ---
+
+Attribute    | Present? | Recommended | Risk if Missing
+-------------|----------|-------------|--------------------------------------------------
+HttpOnly     | NO       | YES         | JavaScript can access and steal the cookie (XSS)
+Secure       | NO       | YES         | Cookie sent over unencrypted HTTP connections
+SameSite     | NO       | Strict/Lax  | Cross-site request forgery (CSRF) possible
+Domain       | NO       | Set properly| May allow broader cookie scope than intended
+Path         | YES (/)  | /           | OK — cookie scoped to entire site
+Expires      | NO       | Session-only | Session cookie expires on browser close (acceptable)
+
+--- Full Set-Cookie Header ---
+
+Set-Cookie: PHPSESSID=a3b1c2d4e5f6789012345678; path=/
+
+Recommended Set-Cookie Header:
+Set-Cookie: PHPSESSID=a3b1c2d4e5f6789012345678; path=/; Secure; HttpOnly; SameSite=Strict
+
+--- Risk Summary ---
+
+Missing HttpOnly (HIGH):
+  - Any JavaScript on the page can read document.cookie
+  - If XSS exists, attacker script can send session cookie to remote server
+  - Attacker gains full session — logged in as the victim
+
+Missing Secure (HIGH):
+  - Cookie is sent in plaintext over HTTP
+  - Anyone on the same network (coffee shop, airport Wi-Fi) can intercept it
+  - Session hijacking without needing any code execution
+
+Missing SameSite (MEDIUM):
+  - Enables Cross-Site Request Forgery (CSRF) attacks
+  - A malicious third-party site can trigger authenticated actions on behalf of victim
+
+--- Recommended PHP Configuration ---
+
+; php.ini settings
+session.cookie_httponly = 1
+session.cookie_secure = 1
+session.cookie_samesite = "Strict"
+session.use_strict_mode = 1

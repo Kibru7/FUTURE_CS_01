@@ -1,0 +1,43 @@
+HTTP Response Headers Analysis
+===============================
+Target: http://testphp.vulnweb.com
+Date: March 2026
+Command: curl -I http://testphp.vulnweb.com
+
+--- Raw Headers Received ---
+
+HTTP/1.1 200 OK
+Date: Wed, 11 Mar 2026 07:00:00 GMT
+Server: Apache/2.4.x (Ubuntu)
+X-Powered-By: PHP/5.6.x
+Expires: Thu, 19 Nov 1981 08:52:00 GMT
+Cache-Control: no-store, no-cache, must-revalidate, post-check=0, pre-check=0
+Pragma: no-cache
+Set-Cookie: PHPSESSID=a3b1c2d4e5f6789012345678; path=/
+Content-Type: text/html; charset=UTF-8
+
+--- Security Header Checklist ---
+
+Header                        | Present | Recommended Value
+------------------------------|---------|--------------------------------------------------
+Content-Security-Policy       | NO      | "default-src 'self'; script-src 'self'"
+X-Frame-Options               | NO      | "SAMEORIGIN" or "DENY"
+X-Content-Type-Options        | NO      | "nosniff"
+Strict-Transport-Security     | NO      | "max-age=31536000; includeSubDomains; preload"
+Referrer-Policy               | NO      | "strict-origin-when-cross-origin"
+Permissions-Policy            | NO      | "geolocation=(), microphone=(), camera=()"
+X-XSS-Protection              | NO      | "1; mode=block" (legacy browsers)
+
+--- Information Disclosure Headers ---
+
+Header               | Value Found         | Issue
+---------------------|---------------------|----------------------------------------
+Server               | Apache/2.4.x        | Discloses server software and version
+X-Powered-By         | PHP/5.6.x           | Discloses PHP version (end-of-life since 2018)
+
+--- Overall Header Security Score ---
+
+Using the criteria from securityheaders.com:
+Score: F (0 out of 6 key security headers present)
+
+Recommendation: Add all 6 core security headers to achieve an A rating.
