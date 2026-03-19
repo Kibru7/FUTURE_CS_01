@@ -38,8 +38,7 @@ This assessment followed strict ethical guidelines.
 - `evidence/screenshots/`
   - Screenshots of OWASP ZAP passive alerts (8 alert types)
 - `evidence/tool-outputs/`
-  - Cleanly documented outputs from tools used (dig, nmap, curl)
-
+  
 •	How to Use This Repo
 1. Open the PDF in `report/` for the business-friendly audit.
 2. Review `evidence/` for supporting screenshots and raw tool outputs.
