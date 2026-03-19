@@ -1,5 +1,4 @@
-# FUTURE_CS_01
-	Vulnerability Assessment — demo.testfire.net (2026-03-16)
+Vulnerability Assessment — demo.testfire.net (2026-03-16)
 
 •	Overview
 This repository contains a security consulting-style vulnerability assessment of a public website using  read-only / passive techniques. The goal is to identify common security weaknesses, classify them in business-friendly risk levels, and provide practical remediation recommendations.
